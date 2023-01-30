@@ -67,6 +67,7 @@ const useDefaultTodoContext = () => {
   return { todos, add, remove, toggle }
 }
 
+// contextapi 생성 (초기값)
 const TodoContext = createContext<ITodoContext>({
   todos: [],
   remove: () => null,
@@ -74,12 +75,14 @@ const TodoContext = createContext<ITodoContext>({
   add: () => null,
 })
 
+// useContext hook을 사용하여 하위 컴포넌트에서 사용
 export const useTodoContext = () => {
   const { todos, add, remove, toggle } = useContext(TodoContext)
 
   return { todos, add, remove, toggle }
 }
 
+// Provider로 감싸서 하위 컴포넌트에게 데이터 전달
 export const TodoContextProvider = ({ children }: PropsWithChildren<any>) => {
   const { todos, add, remove, toggle } = useDefaultTodoContext()
 
