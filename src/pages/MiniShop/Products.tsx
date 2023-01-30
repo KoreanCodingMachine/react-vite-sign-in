@@ -2,25 +2,25 @@ import { useEffect } from 'react'
 import styled from 'styled-components'
 import { useProductContext } from '../../contexts/ProductsContext'
 
-function chunk<T>(arr: T[], size = 0) {
-  // arr.length: 4, size: 3 => chunk length: 2 (Math.ceil(4/3))
-  if (!size) return []
+// function chunk<T>(arr: T[], size = 0) {
+//   // arr.length: 4, size: 3 => chunk length: 2 (Math.ceil(4/3))
+//   if (!size) return []
 
-  const newArr = Array.from(
-    { length: Math.ceil(arr.length / size) },
-    () => []
-  ) as T[][]
-  let newArrIdx = 0
+//   const newArr = Array.from(
+//     { length: Math.ceil(arr.length / size) },
+//     () => []
+//   ) as T[][]
+//   let newArrIdx = 0
 
-  arr.forEach((val, i) => {
-    const _arr = newArr[newArrIdx]
+//   arr.forEach((val, i) => {
+//     const _arr = newArr[newArrIdx]
 
-    _arr.length < size && _arr.push(val)
-    _arr.length === size && newArrIdx++
-  })
+//     _arr.length < size && _arr.push(val)
+//     _arr.length === size && newArrIdx++
+//   })
 
-  return newArr
-}
+//   return newArr
+// }
 
 const StyledProducts = styled.div`
   display: flex;

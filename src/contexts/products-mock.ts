@@ -25,8 +25,19 @@ const generateMockProducts = () => {
     }
     data: IProduct[]
   }> => {
-    const start = page * pageSize
+
+
+    // 페이지네이션 할  데이터 
+    const start = (page-1) * pageSize 
     const end = start + pageSize
+
+    
+   console.log('page',page) // 1
+   console.log('size',pageSize)  // 20
+   console.log('start',start) // 20
+   console.log('end',end)  // 40
+   console.log('totalLength',totalLength)
+   console.log('pageSize',pageSize)
 
     return new Promise(resolve => {
       setTimeout(() => {
@@ -37,7 +48,7 @@ const generateMockProducts = () => {
           },
           data: mockProducts.filter(({ name, brand }) => {
             return name.match(keyword) || brand.match(keyword)
-          }).slice(start, end)
+          }).slice(start,end)
         })
       }, getRandom(300, 700))
     })
