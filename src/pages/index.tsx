@@ -16,6 +16,7 @@ const AppRoutes = () => {
       <Route path="/mini-shop" element={<MiniShop.Main />}>
         <Route path="" element={<MiniShop.Products />} />
         <Route path="carts" element={<MiniShop.Carts />} />
+        <Route path="infinite" element={<MiniShop.ProductsInfinite />} />
       </Route>
     </Routes>
   )

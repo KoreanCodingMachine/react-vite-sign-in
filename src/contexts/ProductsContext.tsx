@@ -1,6 +1,14 @@
-import { createContext, PropsWithChildren, useContext, useState } from 'react'
+import {
+  createContext,
+  PropsWithChildren,
+  useCallback,
+  useContext,
+  useState,
+} from 'react'
 import { IProduct } from '../types'
 import generateMockProducts from './products-mock'
+import Products from './../pages/MiniShop/Products'
+import { array } from 'prop-types'
 
 const getProducts = generateMockProducts()
 
@@ -44,6 +52,7 @@ const useDefaultProductContext = () => {
     get: false,
     addToCart: false,
   })
+  const [total, _setTotal] = useState<IProduct[]>([])
 
   const gets = () => {
     setLoading({ gets: true })
@@ -72,7 +81,16 @@ const useDefaultProductContext = () => {
   const setLoading = (loading: Partial<IProductLoading>) =>
     _setLoading(prev => ({ ...prev, ...loading }))
 
-  return { products, loading, gets, get, addToCart, query, setQuery, totalPage }
+  return {
+    products,
+    loading,
+    gets,
+    get,
+    addToCart,
+    query,
+    setQuery,
+    totalPage,
+  }
 }
 
 // contextapi 생성 (초기값)
@@ -90,7 +108,6 @@ const ProductContext = createContext<IProductContext>({
     get: false,
     addToCart: false,
   },
-
   gets: () => Promise.resolve(),
   get: () => Promise.resolve({} as IProduct),
   addToCart: () => Promise.resolve(),

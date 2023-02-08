@@ -19,6 +19,8 @@ const Main = () => {
       >
         <Link to="/mini-shop">go to products</Link>
         <span>|</span>
+        <Link to="/mini-shop/infinite">go to Infinite products</Link>
+        <span>|</span>
         <Link to="/mini-shop/carts">go to carts</Link>
       </div>
 
