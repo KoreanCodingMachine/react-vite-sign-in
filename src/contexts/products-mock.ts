@@ -5,7 +5,7 @@ const BRAND_LIST = ['삼성', 'LG', '애플']
 const getRandom = (min: number, max: number) => Math.floor(Math.random() * max) + min
 
 const generateMockProducts = () => {
-  const totalLength = getRandom(5, 200)
+  const totalLength = getRandom(20, 400)
   const mockProducts = Array.from({ length: totalLength }, (_, i) => {
     const brand = BRAND_LIST[getRandom(0, BRAND_LIST.length)]
 

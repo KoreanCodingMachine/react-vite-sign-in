@@ -1,16 +1,20 @@
 import {
   createContext,
   PropsWithChildren,
-  useCallback,
+  // useMemo,
+  // useCallback,
   useContext,
   useState,
 } from 'react'
 import { IProduct } from '../types'
 import generateMockProducts from './products-mock'
+import generateMockCart from './cart-mock'
 import Products from './../pages/MiniShop/Products'
-import { array } from 'prop-types'
+
+type ProductId = IProduct['id']
 
 const getProducts = generateMockProducts()
+const mockCart = generateMockCart()
 
 interface IProductQuery {
   keyword: string
@@ -27,6 +31,7 @@ interface IProductLoading {
 interface IProductContext {
   // state
   products: IProduct[]
+  carts: { [id: ProductId]: number }
   totalPage: number
   query: IProductQuery
   loading: IProductLoading
@@ -34,13 +39,17 @@ interface IProductContext {
   // actions (request server)
   gets(): Promise<void>
   get(id: string): Promise<IProduct>
-  addToCart(id: string): Promise<any>
+  addToCart(id: ProductId): Promise<boolean>
+  subToCart(id: ProductId): Promise<{ data: boolean }>
+  removeToCart(id: ProductId): Promise<{ data: boolean }>
+  getsCart(): Promise<{ data: { [id: ProductId]: number } }>
 
   setQuery(query: Partial<IProductQuery>): void
 }
 
 const useDefaultProductContext = () => {
   const [products, setProducts] = useState<IProduct[]>([])
+  const [carts, setCarts] = useState<{ [id: ProductId]: number }>({})
   const [totalPage, setTotalPage] = useState(0)
   const [query, _setQuery] = useState<IProductQuery>({
     keyword: '',
@@ -71,9 +80,25 @@ const useDefaultProductContext = () => {
     return Promise.resolve({} as IProduct)
   }
 
-  const addToCart = (id: string) => {
-    return Promise.resolve()
+  const addToCart = async (id: ProductId) => {
+    setLoading({ addToCart: true })
+    let result = false
+
+    try {
+      result = (await mockCart.add(id)).data
+    } catch (error) {
+      console.warn(error)
+    } finally {
+      setLoading({ addToCart: false })
+
+      getsCart().then(res => setCarts(res.data))
+    }
+
+    return result
   }
+  const subToCart = (id: ProductId) => mockCart.sub(id)
+  const removeToCart = (id: ProductId) => mockCart.remove(id)
+  const getsCart = () => mockCart.gets()
 
   const setQuery = (query: Partial<IProductQuery>) =>
     _setQuery(prev => ({ ...prev, ...query }))
@@ -82,11 +107,15 @@ const useDefaultProductContext = () => {
     _setLoading(prev => ({ ...prev, ...loading }))
 
   return {
+    carts,
     products,
     loading,
     gets,
     get,
     addToCart,
+    subToCart,
+    removeToCart,
+    getsCart,
     query,
     setQuery,
     totalPage,
@@ -95,6 +124,7 @@ const useDefaultProductContext = () => {
 
 // contextapi 생성 (초기값)
 const ProductContext = createContext<IProductContext>({
+  carts: {},
   products: [],
   totalPage: 0,
   query: {
@@ -110,7 +140,10 @@ const ProductContext = createContext<IProductContext>({
   },
   gets: () => Promise.resolve(),
   get: () => Promise.resolve({} as IProduct),
-  addToCart: () => Promise.resolve(),
+  addToCart: () => Promise.resolve(false),
+  subToCart: () => Promise.resolve({ data: false }),
+  removeToCart: () => Promise.resolve({ data: false }),
+  getsCart: () => Promise.resolve({ data: {} }),
   setQuery: () => null,
 })
 

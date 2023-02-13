@@ -21,12 +21,12 @@ const StyledProducts = styled.div`
 
 // 1. 물품 목록 가져오기 -> context 를 사용해서 가져오는 방식을 사용
 const Products = () => {
-  const { loading, gets, products, query, setQuery, totalPage } =
+  const { loading, gets, products, query, addToCart, setQuery, totalPage } =
     useProductContext()
 
   useEffect(() => {
     gets()
-  }, [query.keyword, query.page, query.pageSize])
+  }, [query])
 
   return (
     <>
@@ -55,7 +55,26 @@ const Products = () => {
           <div>Loading...</div>
         ) : (
           products.map(prd => {
-            return <div key={prd.id}>{prd.name}</div>
+            return (
+              <div
+                key={prd.id}
+                style={{
+                  display: 'flex',
+                  gap: '8px',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <span>{prd.name}</span>
+                <button
+                  type="button"
+                  onClick={() => addToCart(prd.id)}
+                  disabled={loading.addToCart}
+                >
+                  add to cart
+                </button>
+              </div>
+            )
           })
         )}
       </StyledProducts>

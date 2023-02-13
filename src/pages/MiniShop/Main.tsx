@@ -1,5 +1,6 @@
 import { Outlet, Link } from 'react-router-dom'
 import { ProductContextProvider } from '../../contexts/ProductsContext'
+import CartCount from '../../components/Product/CartCount'
 
 const Main = () => {
   return (
@@ -22,6 +23,10 @@ const Main = () => {
         <Link to="/mini-shop/infinite">go to Infinite products</Link>
         <span>|</span>
         <Link to="/mini-shop/carts">go to carts</Link>
+      </div>
+
+      <div>
+        <CartCount />
       </div>
 
       <Outlet />
