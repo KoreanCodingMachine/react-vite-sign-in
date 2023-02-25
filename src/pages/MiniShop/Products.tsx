@@ -28,6 +28,10 @@ const Products = () => {
     gets()
   }, [query])
 
+  useEffect(() => {
+    setQuery({ page: 1 })
+  }, [])
+
   return (
     <>
       <input

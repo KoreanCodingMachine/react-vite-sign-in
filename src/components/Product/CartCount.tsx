@@ -18,7 +18,7 @@ export default function CartCount() {
         fontSize: '14px',
       }}
     >
-      {Object.keys(carts).length}
+      {carts.reduce((acc, cur) => acc + cur.count, 0)}
     </div>
   )
 }

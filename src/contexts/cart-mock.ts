@@ -20,7 +20,6 @@ const generateMockCart = () => {
           }
 
           mockProductIdMap[productId]++
-          console.log(mockProductIdMap)
 
           resolve({ data: true })
         }, getRandom(300, 700))
