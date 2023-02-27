@@ -1,10 +1,11 @@
 import { Outlet, Link } from 'react-router-dom'
-import { ProductContextProvider } from '../../contexts/ProductsContext'
+// import { ProductContextProvider } from '../../contexts/ProductsContext'
 import CartCount from '../../components/Product/CartCount'
 
 const Main = () => {
   return (
-    <ProductContextProvider>
+    // <ProductContextProvider>
+    <>
       <h3
         style={{
           borderBottom: '1px solid #232323',
@@ -30,7 +31,8 @@ const Main = () => {
       </div>
 
       <Outlet />
-    </ProductContextProvider>
+    </>
+    // </ProductContextProvider>
   )
 }
 

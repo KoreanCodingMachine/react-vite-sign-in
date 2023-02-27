@@ -35,8 +35,8 @@ interface IProductContext {
   gets(): Promise<boolean>
   get(id: ProductId): Promise<{ data: IProduct | undefined }>
   addToCart(id: ProductId): Promise<boolean>
-  subToCart(id: ProductId): Promise<{ data: boolean }>
-  removeToCart(id: ProductId): Promise<{ data: boolean }>
+  subToCart(id: ProductId): Promise<boolean>
+  removeToCart(id: ProductId): Promise<boolean>
   getsCart(): Promise<ICart[]>
 
   setQuery(query: Partial<IProductQuery>): void
@@ -59,22 +59,23 @@ const useDefaultProductContext = () => {
     subToCart: false,
   })
 
-  const gets = () => {
+  const gets = async () => {
     if (query.page < 1) return Promise.resolve(false)
 
     setLoading({ gets: true })
 
-    return mockProducts
-      .gets(query.page, query.pageSize, query.keyword)
-      .then(res => {
-        setProducts(res.data)
-        setTotalPage(+res.headers['total-page'])
-
-        return true
-      })
-      .finally(() => {
-        setLoading({ gets: false })
-      })
+    try {
+      const res = await mockProducts.gets(
+        query.page,
+        query.pageSize,
+        query.keyword
+      )
+      setProducts(res.data)
+      setTotalPage(+res.headers['total-page'])
+      return true
+    } finally {
+      setLoading({ gets: false })
+    }
   }
 
   const get = (id: ProductId) => mockProducts.get(id)
@@ -182,8 +183,8 @@ const ProductContext = createContext<IProductContext>({
   gets: () => Promise.resolve(false),
   get: () => Promise.resolve({ data: {} as IProduct }),
   addToCart: () => Promise.resolve(false),
-  subToCart: () => Promise.resolve({ data: false }),
-  removeToCart: () => Promise.resolve({ data: false }),
+  subToCart: () => Promise.resolve(false),
+  removeToCart: () => Promise.resolve(false),
   getsCart: () => Promise.resolve([] as ICart[]),
   setQuery: () => null,
 })
@@ -197,7 +198,7 @@ export const useProductContext = () => {
 
 // Provider로 감싸서 하위 컴포넌트에게 데이터 전달
 export const ProductContextProvider = ({ children }: PropsWithChildren) => {
-  const value = useDefaultProductContext()
+  const value: IProductContext = useDefaultProductContext()
 
   return (
     <ProductContext.Provider value={value}>{children}</ProductContext.Provider>
