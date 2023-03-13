@@ -4,20 +4,22 @@ import * as productsAtom from './products-atom'
 
 export const productsQuery = selector({
   key: 'products_query',
-  get({ get }) {
+  async get({ get }) {
     const page = get(productsAtom.page)
     const pageSize = get(productsAtom.pageSize)
     const keyword = get(productsAtom.keyword)
 
-    console.log({ page, pageSize, keyword })
-
-    return productsApi.gets(page, pageSize, keyword).then(res => {
-      const { headers, data } = res
+    try {
+      const { headers, data } = await productsApi.gets(page, pageSize, keyword)
 
       return {
         totalPage: headers['total-page'],
         products: data,
       }
-    })
+    } catch (error) {
+      console.warn(error)
+
+      throw error
+    }
   },
 })

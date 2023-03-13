@@ -21,6 +21,7 @@ export const useProductsParams = () => {
   const setParams = (params: ProductParams) => {
     const keys = Object.keys(params) as (keyof ProductParams)[]
     
+
     keys.forEach(key => {
       const value = params[key]
 
